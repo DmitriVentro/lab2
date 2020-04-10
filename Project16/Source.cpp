@@ -106,5 +106,27 @@ float* gausses_method(float** arr, float* y, int length)
 		y[k] = y[index];
 		y[index] = temp;
 
-		
+		for (int i = k; i < length; i++)
+		{
+			float temp = arr[i][k];
+			if (abs(temp) < eps) continue;
+			for (int j = 0; j < length; j++)
+				arr[i][j] = arr[i][j] / temp;
+			y[i] = y[i] / temp;
+			if (i == k)  continue;
+			for (int j = 0; j < length; j++)
+				arr[i][j] = arr[i][j] - arr[k][j];
+			y[i] = y[i] - y[k];
+		}
+		k++;
+	}
+
+	for (k = length - 1; k >= 0; k--)
+	{
+		x[k] = y[k];
+		for (int i = 0; i < k; i++)
+			y[i] = y[i] - arr[i][k] * x[k];
+	}
+	return x;
+}
 
