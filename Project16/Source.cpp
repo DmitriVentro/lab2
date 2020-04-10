@@ -20,19 +20,19 @@ int main()
 			m = rand() % 11;
 			break;
 		case 2:
-			cout << "Enter n and m\n";
+			cout << "Введите n и m\n";
 			cin >> n;
 			cin >> m;
 			break;
 		case 0:
-			cout << "Goodbye! See you soon!\n";
+			cout << "Ещё увидимся!\n";
 			break;
 		default:
-			cout << "ERROR!\n";
+			cout << "еррор!\n";
 			break;
 		}
 	while (n == 0 || m == 0 || n == 1 || m == 1);
-	cout << "number of shooters:" << n << "\nnumber of shots:" << m << "\n";
+	cout << "Всего стрелков:" << n << "\nКоличество выстреловы:" << m << "\n";
 	int** a;
 	a = new int* [n];
 	for (int i = 0; i < n; i++)
@@ -57,11 +57,11 @@ int main()
 
 void MENU()
 {
-	cout << "\t!HELLO THERE!\n";
-	cout << "Choose, how the program will work:\n";
+	cout << "\t!ПРИВЕТИКИ!\n";
+	cout << "Есть два выбора:\n";
 	cout << endl;
-	cout << "1 - random filling\n";
-	cout << "2 - manual filling\n";
+	cout << "1 - рандом\n";
+	cout << "2 - ручками?\n";
 	cout << "0 - exit\n";
 }
 
@@ -75,7 +75,7 @@ void RESULTS(int** n, int* n1, int a, int b)
 			s += n[i][j];
 		n1[i] = s;
 	}
-	cout << "\nResults: ";
+	cout << "\nРезультаты: ";
 	for (int i = 0; i < a; i++)
 		cout << n1[i] << " ";
 }
@@ -89,12 +89,12 @@ void WINNERS(int* n, int a)
 		if (n[i] > max)
 			max = n[i];
 	}
-	cout << "\n" << max << "\nWINNERS:\n";
+	cout << "\n" << max << "\nПОБЕДИТЕЛЬ:\n";
 	for (int i = 0; i < a; i++)
 	{
 		if (n[i] == max)
 		{
-			cout << "Shooter number " << i + 1 << endl;
+			cout << "Номер стрелка " << i + 1 << endl;
 		}
 	}
 }
