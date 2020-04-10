@@ -1,100 +1,110 @@
+
 #include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include <ctime>
 using namespace std;
-void MENU();
-void RESULTS(int** n, int* n1, int a, int b);
-void WINNERS(int* n, int a);
+void sys_cin(float** arr, float* y, int length);
+void sys_out(float** arr, float* y, int length);
+float* gausses_method(float** arr, float* y, int length);
+/*
+Тестовые данные просто для проверки работоспособности:
+3
+2
+4
+1
+5
+2
+1
+2
+3
+4
+36
+47
+37
+*/
 int main()
 {
-	int n, m, key = 1;
-	MENU();
-	cout << endl << ":"; cin >> key;
-	srand(time(NULL));
-	do
-		switch (key)
-		{
-		case 1:
-			n = rand() % 31;
-			m = rand() % 11;
-			break;
-		case 2:
-			cout << "Enter n and m\n";
-			cin >> n;
-			cin >> m;
-			break;
-		case 0:
-			cout << "Goodbye! See you soon!\n";
-			break;
-		default:
-			cout << "ERROR!\n";
-			break;
-		}
-	while (n == 0 || m == 0 || n == 1 || m == 1);
-	cout << "number of shooters:" << n << "\nnumber of shots:" << m << "\n";
-	int** a;
-	a = new int* [n];
-	for (int i = 0; i < n; i++)
-		a[i] = new int[m];
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < m; j++)
-			a[i][j] = rand() % 11;
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			printf("%5d", a[i][j]);
-		}
-		cout << endl;
-	}
-	int* res;
-	res = new int[n];
-	RESULTS(a, res, n, m);
-	WINNERS(res, n);
+	setlocale(LC_ALL, "");
+	float** arr, * y, * x;
+	int length;
+	cout << "Введите количество уравнений: ";
+	cin >> length;
+	arr = new float* [length];
+	y = new float[length];
+	sys_cin(arr, y, length);
+	sys_out(arr, y, length);
+	//ineedmoreammo!!11!
+	x = gausses_method(arr, y, length);
+	for (int i = 0; i < length; i++)
+		cout << "x[" << i << "]=" << x[i] << endl;
 	return 0;
 }
-
-void MENU()
+void sys_cin(float** arr, float* y, int length)
 {
-	cout << "\t!HELLO THERE!\n";
-	cout << "Choose, how the program will work:\n";
-	cout << endl;
-	cout << "1 - random filling\n";
-	cout << "2 - manual filling\n";
-	cout << "0 - exit\n";
-}
-
-void RESULTS(int** n, int* n1, int a, int b)
-{
-	int s;
-	for (int i = 0; i < a; i++)
+	for (size_t i = 0; i < length; i++)
 	{
-		s = 0;
-		for (int j = 0; j < b; j++)
-			s += n[i][j];
-		n1[i] = s;
-	}
-	cout << "\nResults: ";
-	for (int i = 0; i < a; i++)
-		cout << n1[i] << " ";
-}
-
-void WINNERS(int* n, int a)
-{
-	int max, maxI;
-	max = n[0];
-	for (int i = 0; i < a; i++)
-	{
-		if (n[i] > max)
-			max = n[i];
-	}
-	cout << "\n" << max << "\nWINNERS:\n";
-	for (int i = 0; i < a; i++)
-	{
-		if (n[i] == max)
+		arr[i] = new float[length];
+		for (size_t j = 0; j < length; j++)
 		{
-			cout << "Shooter number " << i + 1 << endl;
+			cout << "arr[" << i << "][" << j << "]= ";
+			cin >> arr[i][j];
 		}
 	}
+	for (size_t i = 0; i < length; i++)
+	{
+		cout << "y[" << i << "]=";
+		cin >> y[i];
+
+	}
 }
+void sys_out(float** arr, float* y, int length)
+{
+	for (int i = 0; i < length; i++)
+	{
+		for (int j = 0; j < length; j++)
+		{
+			cout << arr[i][j] << "*x" << j;
+			if (j < length - 1)
+				cout << " + ";
+		}
+		cout << " = " << y[i] << endl;
+	}
+	return;
+}
+float* gausses_method(float** arr, float* y, int length)
+{
+	float* x, max;
+	int k, index;
+	const float eps = 0.00001;  // точность
+	x = new float[length];
+	k = 0;
+	while (k < length)
+	{
+		max = abs(arr[k][k]);
+		index = k;
+		for (int i = k + 1; i < length; i++)
+		{
+			if (abs(arr[i][k]) > max)
+			{
+				max = abs(arr[i][k]);
+				index = i;
+			}
+		}
+		// Перестановка строк
+		if (max < eps)
+		{
+			// нет ненулевых диагональных элементов
+			cout << "Решение получить невозможно из-за нулевого столбца ";
+			cout << index << " матрицы A" << endl;
+			return 0;
+		}
+		for (int j = 0; j < length; j++)
+		{
+			float temp = arr[k][j];
+			arr[k][j] = arr[index][j];
+			arr[index][j] = temp;
+		}
+		float temp = y[k];
+		y[k] = y[index];
+		y[index] = temp;
+
+		
+
