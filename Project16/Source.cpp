@@ -5,7 +5,7 @@
 using namespace std;
 void MENU();
 void RESULTS(int** n, int* n1, int a, int b);
-
+void WINNERS(int* n, int a);
 int main()
 {
 	int n, m, key = 1;
