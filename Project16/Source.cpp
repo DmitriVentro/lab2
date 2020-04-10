@@ -29,19 +29,19 @@ int main()
 			m = rand() % 21;
 			break;
 		case 2:
-			cout << "Enter n and m\n";
+			cout << "Введите n и m\n";
 			cin >> n;
 			cin >> m;
 			break;
 		case 0:
-			cout << "Goodbye! See you soon!\n";
+			cout << "Ещё увидимся!\n";
 			break;
 		default:
-			cout << "ERROR!\n";
+			cout << "ошибка!\n";
 			break;
 		}
 	while (n < 4 || m < 4);
-	cout << "\nSize of the field: " << n << " rows and " << m << " columns\n";
+	cout << "\nРазмерность Вселенной: " << n << " строки " << m << " колонки\n";
 	int** field; //задаем поле (многомерный массив)
 	field = new int* [n];
 	for (int i = 0; i < n; i++)
@@ -72,9 +72,9 @@ int main()
 		Edem = FieldsCompare(field, PreviousField, n, m) == 0;    //сравниваем поля
 		livingpoints = livingPoints(field, n, m);                 //проверяем количество живых клеток
 		if (Edem)
-			cout << "Edem Garden\n";                              //Эдемов сад
+			cout << "Эдемов сад\n";                              //Эдемов сад
 		if (livingpoints == 0)
-			cout << "YOU DIED\n";                                 //все здохли. конец.
+			cout << "ВЫ ПРОИГРАЛИ ДА ВСЕ МЕРТВЫ\n";                  //все сдохли. конец.
 		Sleep(2000); //прерывание цикла, чтобы пользователь успел увидеть поле
 	} while (livingpoints != 0 || !Edem);
 	return 0;
@@ -82,11 +82,11 @@ int main()
 
 void MENU() //меню
 {
-	cout << "\t!HELLO THERE!\n";
-	cout << "Choose, how the program will work:\n";
+	cout << "\t!ЗДРАСТВУЙТЕ!\n";
+	cout << "Есть только два выбора:\n";
 	cout << endl;
-	cout << "1 - random size\n";
-	cout << "2 - you will set the size\n";
+	cout << "1 - Рандомное заполнение\n";
+	cout << "2 - Или на выбор\n";
 	cout << "0 - exit\n";
 }
 
