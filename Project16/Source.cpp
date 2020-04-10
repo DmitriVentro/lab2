@@ -1,182 +1,166 @@
 #include <iostream>
-#include <math.h>
-using namespace std;
-namespace first_task {
-	void enter_values(int& rows, int& cols, int& a, int& b)
+#include <fstream>
+#include <string>
+using::std::cout;
+using::std::cin;
+namespace task_2
+{
+	void input_size(int& n, int& m)
 	{
-		cout << "Левая граница значений = ";
-		cin >> a;
-		cout << "Правая граница значений = ";          // Левая и правая граница значений в матрице
-		cin >> b;
-		cout << "Сколько столбцов X строк = ";
-		cin >> rows;
-		cout << "\n";
-		cols = rows;                        //Количество столбиков в матрице
+		cout << "Введите m:\n"; cin >> m;
+		cout << "Введите n:\n"; cin >> n;
 	}
-	void show_arr(int** arr, int rows, int cols)
+	void arr_decl(int** arr_A, int** arr_C, int** t_arr_A, int* vec_B, int* vec_D, int m, int n)
 	{
-		cout << "Матрица:\n";
-
-		for (int i = 0; i < rows; i++)
+		//arr_A
+		for (int i = 0; i < m; i++)
 		{
-			arr[i] = new int[cols];
+			arr_A[i] = new int[n];
 		}
-	}
-	void fill_arr(int** arr, int rows, int cols, int a, int b)
-	{
-		for (int i = 0; i < rows; i++)
+		//arr_C
+		for (int i = 0; i < n; i++)
 		{
-			for (int j = 0; j < cols; j++)
+			arr_C[i] = new int[n];
+		}
+		//new_arr_A
+		for (int i = 0; i < m; i++)
+		{
+			t_arr_A[i] = new int[n];
+		}
+		//New
+
+	}
+	void input_file(int** arr_A, int** arr_C, int* vec_B, int* vec_D, int m, int n)
+	{
+		std::string way = "D:\\who\\r.txt";
+		std::ifstream file_in;
+		file_in.open(way);
+		//arr_A
+		cout << "A(m,n):\n\n";
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
 			{
-				arr[i][j] = a + rand() % (b - a + 1);
-				cout << arr[i][j] << "\t";
+				file_in >> arr_A[i][j];
+				cout << arr_A[i][j] << "\t";
 			}
-			cout << endl;
+			cout << std::endl;
 		}
-	}
-	void red_area_analyze(int** arr, int rows)
-	{
-		cout << "Выше главной и побочной диагональ:";
-		for (int i = 0; i < rows; i++)
+		cout << std::endl;
+		//arr_C
+		cout << "C(n,m):\n\n";
+		for (int i = 0; i < n; i++)
 		{
-			for (int j = i + 1; j < rows - i - 1; j++)
+			for (int j = 0; j < m; j++)
 			{
-				cout << arr[i][j] << " ";
+				file_in >> arr_C[i][j];
+				cout << arr_C[i][j] << "\t";
 			}
+			cout << std::endl;
 		}
-		cout << endl;
-		system("pause");
-	}
-	void red_area_show_element(int** arr, int rows, int& min, int& imin, int& jmin)
-	{
-		cout << "Минимальный положительный элемент: ";
-		for (int i = 0; i < rows; i++)
+		cout << std::endl;
+		//vec_B
+		cout << "B(m):\n\n";
+		for (int i = 0; i < m; i++)
 		{
-			for (int j = i + 1; j < rows - i - 1; j++)
+			file_in >> vec_B[i];
+			cout << vec_B[i] << " ";
+		}
+		cout << std::endl;
+		//vec_D
+		cout << "D(m):\n\n";
+		for (int i = 0; i < n; i++)
+		{
+			file_in >> vec_D[i];
+			cout << vec_D[i] << " ";
+		}
+		cout << std::endl;
+	}
+	void transp_arr_A(int** arr_A, int** t_arr_A, int& n, int& m)
+	{
+		for (int i = 0; i < m; i++)
+			for (int j = 0; j < n; j++)
+				t_arr_A[i][j] = arr_A[j][i];
+		int temp = n;
+		n = m;
+		m = temp;
+	}
+	void AtxB(int** t_arr_A, int* vec_B, int* New, int n, int m)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			New[i] = 0;
+			for (int j = 0; j < m; j++)
 			{
-
-				if (arr[i][j] > 0)
-				{
-					if (arr[i][j] < min)
-					{
-						min = arr[i][j];
-						imin = i;
-						jmin = j;
-					}
-				}
-			}
-		}
-		if (min > 0 && min != INT_MAX)
-		{
-			cout << min << "\n";; //Вывод минимального положительного числа выше гланой диагонали
-			system("pause");
-		}
-		else {
-			cout << "There aren`t positive elements\n";
-		}
-
-	}
-	void green_area_analyze(int** arr, int cols)
-	{
-		cout << "Ниже побочной и главной:\n";
-
-		for (int i = 1; i <= cols - 1; i++)
-			for (int j = cols - i; j < cols - 1; ++j)
-				if (i > j)
-					cout << arr[i][j] << " ";
-	}
-	void green_area_show_element(int** arr, int cols, int a, int& max, int& imax, int& jmax)
-	{
-		cout << "Максимальный отрицательный: ";
-
-		for (int i = 1; i <= cols - 1; i++)
-		{
-			for (int j = cols - i; j < cols - 1; ++j)
-			{
-				if (i > j)
-				{
-					if (arr[i][j] < 0)
-					{
-						if (arr[i][j] > max)
-						{
-
-							max = arr[i][j];
-							imax = i;
-							jmax = j;
-						}
-					}
-				}
+				New[i] += t_arr_A[i][j] * vec_B[j];
 			}
 		}
-		if (max < 0 && max != a) {
-			cout << max << "\n";; //Вывод максимального отрицательного
-
-		}
-		else {
-			cout << "Отрицательных нету\n";
-
-		}
-		system("pause");
+		cout << "Матрица A умноженная на вектор B: " << std::endl;
+		for (int i = 0; i < m; i++) cout << New[i] << std::endl;
 	}
-	void modification(int** arr, int cols, int a, int max, int min, int jmax, int imax, int imin, int jmin, int rows)
+	void C_x_ten(int** arr_C, int n, int m)
 	{
-		if (max < 0 && max != a && min > 0 && min != INT_MAX) {
-			cout << "Новая матрица: \n";
-			int extra;
-			extra = arr[imin][jmin];
-			arr[imin][jmin] = arr[imax][jmax];
-			arr[imax][jmax] = extra;
-			for (int i = 0; i < rows; i++)
+		cout << "Умножение Cx10:\n";
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < m; j++)
 			{
-				for (int j = 0; j < cols; j++)
-				{
-					cout << arr[i][j] << "\t";
-
-				}
-				cout << endl;
+				arr_C[i][j] = arr_C[i][j] * 10;
 			}
 		}
-		else if (max >= 0 || max == a)
+		for (int i = 0; i < n; i++)
 		{
-			cout << "Нету отрицательных значений для реализации";
+			for (int j = 0; j < m; j++)
+			{
+				printf("%5d ", arr_C[i][j]);
+			}
+			cout << std::endl;
 		}
-		else if (min <= 0 || min == INT_MAX)
-		{
-			cout << "Нету положительных значений для реализации";
-		}
-		else
-		{
-			cout << "Нету как отрицательных, так и положительных значений";
-		}
+		cout << std::endl;
 	}
-	void show_test_variables()
+	void CxD(int** arr_C, int* vec_D, int* New_1, int n, int m)
 	{
-		cout << "\n\t\t\t\t\tТестовые значения:\n"
-			<< "\t\t\t\t\t\ a = -40, b = 40, rows = 4\n"
-			<< "\t\t\t\t\t\ a = -40, b = 20, rows = 4\n"
-			<< "\t\t\t\t\t\ a = -40, b = 20, rows = 5\n";
+		for (int i = 0; i < n; i++)
+		{
+			New_1[i] = 0;
+			for (int j = 0; j < m; j++)
+			{
+				New_1[i] += arr_C[i][j] * vec_D[j];
+			}
+		}
+		cout << "Матрица Cx10 умноженная на вектор D: " << std::endl;
+		for (int i = 0; i < m; i++) cout << New_1[i] << std::endl;
+	}
+	void subtraction(int* New, int* New_1, int m)
+	{
+		for (int i = 0; i < m; i++)
+		{
+			New[i] = New[i] - New_1[i];
+		}
+		cout << std::endl;
+		cout << "Разница:\n";
+		for (int i = 0; i < m; i++) cout << New[i] << std::endl;
+		cout << std::endl;
 	}
 }
 int main()
 {
 	setlocale(LC_ALL, "");
-	int rows, cols, a, b;
-	first_task::show_test_variables();
-	first_task::enter_values(rows, cols, a, b);
-	int** arr = new int* [rows];
-	int max = a;
-	int imax = 0, jmax = 0;
-	int imin = 0, jmin = 0;
-	int min = INT_MAX;
-	first_task::show_arr(arr, rows, cols);
-	first_task::fill_arr(arr, rows, cols, a, b);
-	first_task::red_area_analyze(arr, rows);
-	first_task::red_area_show_element(arr, rows, min, imin, jmin);
-	first_task::green_area_analyze(arr, cols);
-	first_task::green_area_show_element(arr, cols, a, max, imax, jmax);
-	first_task::modification(arr, cols, a, max, min, jmax, imax, imin, jmin, rows);
-	delete[] arr;
-
+	int m, n;
+	task_2::input_size(n, m);
+	int** arr_A = new int* [m];
+	int** arr_C = new int* [n];
+	int* vec_B = new int[m];
+	int* vec_D = new int[m];
+	int** t_arr_A = new int* [m];
+	int* New = new int[m];
+	int* New_1 = new int[m];
+	task_2::arr_decl(arr_A, arr_C, t_arr_A, vec_B, vec_D, m, n);
+	task_2::input_file(arr_A, arr_C, vec_B, vec_D, m, n);
+	task_2::transp_arr_A(arr_A, t_arr_A, n, m);
+	task_2::AtxB(t_arr_A, vec_B, New, n, m);
+	task_2::C_x_ten(arr_C, n, m);
+	task_2::CxD(arr_C, vec_D, New_1, n, m);
+	task_2::subtraction(New, New_1, m);
+	return 0;
 }
-
-
