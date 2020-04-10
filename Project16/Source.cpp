@@ -78,3 +78,109 @@ int main()
 		Sleep(2000); //прерывание цикла, чтобы пользователь успел увидеть поле
 	} while (livingpoints != 0 || !Edem);
 	return 0;
+}
+
+void MENU() //меню
+{
+	cout << "\t!HELLO THERE!\n";
+	cout << "Choose, how the program will work:\n";
+	cout << endl;
+	cout << "1 - random size\n";
+	cout << "2 - you will set the size\n";
+	cout << "0 - exit\n";
+}
+
+void fieldView(int** a, int n, int m) //вывод поля
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (a[i][j] == 1)
+				cout << '*';
+			else
+				cout << ' ';
+			cout << ' ';
+		}
+		cout << endl;
+	}
+}
+
+int livingPoints(int** a, int n, int m) //счет живых точек
+{
+	int count = 0;
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			if (a[i][j] == 1)
+				count++;
+	return count;
+}
+
+void neighborhood(int nb[][2], int x, int y) //координаты соседей точки
+{
+	int k = 0;
+	for (int i = x - 1; i <= x + 1; i++)
+		for (int j = y - 1; j <= y + 1; j++)
+		{
+			if (i == x && j == y)
+				continue;
+			nb[k][0] = i;
+			nb[k][1] = j;
+			k++;
+		}
+}
+
+int amountLivingNB(int** a, int n, int m, int x, int y) //кол-во живых соседей у клетки[x][y]
+{
+	int count = 0;
+	int nb[8][2];
+	int x_, y_;
+	neighborhood(nb, x, y);
+	for (int i = 0; i < 8; i++)
+	{
+		x_ = nb[i][0];
+		y_ = nb[i][1];
+		if (x_ < 0 || y_ < 0)
+			continue;
+		if (x_ >= n || y_ >= m)
+			continue;
+		if (a[x_][y_] == 1)
+			count++;
+	}
+	return count;
+}
+
+void NextGen(int** a, int** a1, int n, int m) //следующее поколение точек
+{
+	int livingNB, p;
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+		{
+			p = a1[i][j];
+			livingNB = amountLivingNB(a1, n, m, i, j);
+			if (p == 0)
+			{
+				if (livingNB == 3)
+					a[i][j] = 1;
+			}
+			else
+				if (livingNB < 2 || livingNB > 3)
+					a[i][j] = 0;
+		}
+}
+
+void CopyCopy(int** a, int** a1, int n, int m) //копирование прошлого поля
+{
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			a1[i][j] = a[i][j];
+}
+
+int FieldsCompare(int** a, int** a1, int n, int m) //сравнение полей
+{
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			if (a != a1)
+				return -1;
+	return 0;
+}
