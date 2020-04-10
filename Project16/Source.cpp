@@ -132,3 +132,51 @@ namespace first_task {
 				{
 					cout << arr[i][j] << "\t";
 
+				}
+				cout << endl;
+			}
+		}
+		else if (max >= 0 || max == a)
+		{
+			cout << "Нету отрицательных значений для реализации";
+		}
+		else if (min <= 0 || min == INT_MAX)
+		{
+			cout << "Нету положительных значений для реализации";
+		}
+		else
+		{
+			cout << "Нету как отрицательных, так и положительных значений";
+		}
+	}
+	void show_test_variables()
+	{
+		cout << "\n\t\t\t\t\tТестовые значения:\n"
+			<< "\t\t\t\t\t\ a = -40, b = 40, rows = 4\n"
+			<< "\t\t\t\t\t\ a = -40, b = 20, rows = 4\n"
+			<< "\t\t\t\t\t\ a = -40, b = 20, rows = 5\n";
+	}
+}
+int main()
+{
+	setlocale(LC_ALL, "");
+	int rows, cols, a, b;
+	first_task::show_test_variables();
+	first_task::enter_values(rows, cols, a, b);
+	int** arr = new int* [rows];
+	int max = a;
+	int imax = 0, jmax = 0;
+	int imin = 0, jmin = 0;
+	int min = INT_MAX;
+	first_task::show_arr(arr, rows, cols);
+	first_task::fill_arr(arr, rows, cols, a, b);
+	first_task::red_area_analyze(arr, rows);
+	first_task::red_area_show_element(arr, rows, min, imin, jmin);
+	first_task::green_area_analyze(arr, cols);
+	first_task::green_area_show_element(arr, cols, a, max, imax, jmax);
+	first_task::modification(arr, cols, a, max, min, jmax, imax, imin, jmin, rows);
+	delete[] arr;
+
+}
+
+
