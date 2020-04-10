@@ -72,7 +72,7 @@ namespace first_task {
 			system("pause");
 		}
 		else {
-			cout << "There aren`t positive elements\n";
+			cout << "Положительных не имеется\n";
 		}
 
 	}
