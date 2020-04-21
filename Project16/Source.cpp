@@ -31,7 +31,7 @@ namespace game
 		cout << endl << "---------" << endl;
 	}
 
-	int lP(int** a, int n, int m, int s, int de) // сумма всех живых и мертвых клеток
+	int lP(int** a, int n, int m, int& s, int& de) // сумма всех живых и мертвых клеток
 	{
 		int count = 0, sum = 0;
 		for (int i = 0; i < n; i++)
@@ -100,30 +100,33 @@ namespace game
 			}
 	}
 
-	void CC(int** a, int** a1, int n, int m, int s, int su, int de, int det) //Копирование старого 
+	void CC(int** a, int** a1, int** a2, int n, int m, int& s, int& su, int& de, int& det, int& suy, int& dey) //Копирование старого 
 	{
 		unsigned int i, j;
 		for (i = 0; i < n; i++) {
 			for (j = 0; j < m; j++) {
+				a2[i][j] = a1[i][j];
 				a1[i][j] = a[i][j];
-				su = s;
-				det = de;
 			}
 		}
+
+		suy = su;
+		dey = det;
+
+		su = s;
+		det = de;
 	}
-	int FC(int** a, int** a1, int n, int m, int x, int s, int su, int de, int det)  //Проверка на живых и цикл
+	int FC(int** a, int** a1, int n, int m, int x, int& s, int& su, int& de, int& det)  //Проверка на живых и цикл
 	{
 		unsigned int i, j;
 		for (i = 0; i < n; i++)
 		{
 			for (j = 0; j < m; j++)
 			{
-				if ((a[i][j] != a1[i][j]) || ((s == su) || (de == det)))
+				if ((a[i][j] != a1[i][j]))
 				{
 
-
 					return -1;
-
 				}
 			}
 		}
@@ -133,7 +136,13 @@ namespace game
 int main()
 {
 	setlocale(LC_ALL, "ru");
-	int n, m, x = 0, s = 0, su = -50, de = 0, det = -50;
+
+	int n, m, x = 0, k = 0;
+	int s, de, su, det, suy, dey;
+	s = 0;
+	de = 0;
+	su = -50;
+	det = -50;
 	cout << "Задайте размерность поле :";
 	cin >> n;
 	cin >> m;
@@ -158,6 +167,12 @@ int main()
 	PreviousField = new int* [n];
 	for (int i = 0; i < n; i++)
 		PreviousField[i] = new int[m];
+
+	int** YesterdayField;
+	YesterdayField = new int* [n];
+	for (int i = 0; i < n; i++)
+		YesterdayField[i] = new int[m];
+
 	int lp = -1;
 	bool Edem = false;
 	bool death = false;
@@ -166,9 +181,14 @@ int main()
 		game::fV(field, n, m);
 		Edem = game::FC(field, PreviousField, n, m, x, s, su, de, det) == 0;
 		death = game::FC(field, PreviousField, n, m, x, s, su, de, det) == -2;
-		game::CC(field, PreviousField, n, m, s, su, de, det);
+		game::CC(field, PreviousField, YesterdayField, n, m, s, su, de, det, suy, dey);
 		game::NG(field, PreviousField, n, m);
 		lp = game::lP(field, n, m, s, de);
+
+		if (k >= 3 && k % 2 == 1)
+			Edem = game::FC(field, YesterdayField, n, m, x, s, suy, de, dey) == 0;
+
+
 		if (Edem)
 		{
 			cout << "Эдем создан\n";
@@ -180,6 +200,7 @@ int main()
 			return 0;
 		}
 		Sleep(100);
+		k++;
 	} while (lp != 0 || !Edem);
 	return 0;
 }
